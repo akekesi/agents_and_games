@@ -7,27 +7,31 @@ from agents_and_games.agents.agent_minimax import AgentMinimax
 
 
 def main():
-    tic_tac_toe = TicTacToe()
-    players = "(1 - Human, 2 - Random, 3 - Minimax)"
-    players = {
+    game = TicTacToe()
+    players_dict = {
         "1": AgentHuman(),
         "2": AgentRandom(),
         "3": AgentMinimax(players=Players, max_depth=5),
     }
-    answers = players.keys()
+    answers = players_dict.keys()
+    players_text = (", ".join(f"{key} - {player.__class__.__name__.replace("Agent", "")}" for key, player in players_dict.items()))
+
     # choose the first player
     player_1 = get_input(
-        message=f"Choose the first player {players}: ",
+        message=f"Choose the first player ({players_text}): ",
         answers=answers,
     )
+
     # choose the second player
     player_2 = get_input(
-        message=f"Choose the second player {players}: ",
+        message=f"Choose the second player ({players_text}): ",
         answers=answers,
     )
-    tic_tac_toe.play_game(
-        player_1=players[player_1],
-        player_2=players[player_2],
+
+    # play the game
+    game.play_game(
+        player_1=players_dict[player_1],
+        player_2=players_dict[player_2],
     )
 
 
