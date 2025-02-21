@@ -12,8 +12,16 @@ def main(game_constructor):
     players_dict = {
         "1": AgentHuman(),
         "2": AgentRandom(),
-        "3": AgentMinimax(players=Players, max_depth=5),
-        "4": AgentMCTS(game_constructor=game_constructor, players=Players, iterations=1000),
+        "3": AgentMinimax(
+            players=Players,
+            max_depth=5
+        ),
+        "4": AgentMCTS(
+            game_constructor=game_constructor,
+            players=Players,
+            max_depth=999,
+            iterations=1000,
+        ),
     }
     answers = players_dict.keys()
     players_text = (", ".join(f"{key} - {player.__class__.__name__.replace("Agent", "")}" for key, player in players_dict.items()))
