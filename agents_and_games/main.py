@@ -4,14 +4,16 @@ from agents_and_games.games.tic_tac_toe import TicTacToe
 from agents_and_games.agents.agent_human import AgentHuman
 from agents_and_games.agents.agent_random import AgentRandom
 from agents_and_games.agents.agent_minimax import AgentMinimax
+from agents_and_games.agents.agent_mcts import AgentMCTS
 
 
-def main():
-    game = TicTacToe()
+def main(game_constructor):
+    game = game_constructor()
     players_dict = {
         "1": AgentHuman(),
         "2": AgentRandom(),
         "3": AgentMinimax(players=Players, max_depth=5),
+        "4": AgentMCTS(game_constructor=game_constructor, players=Players, iterations=1000),
     }
     answers = players_dict.keys()
     players_text = (", ".join(f"{key} - {player.__class__.__name__.replace("Agent", "")}" for key, player in players_dict.items()))
@@ -36,4 +38,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    GameConstructor = TicTacToe
+    main(game_constructor=GameConstructor)

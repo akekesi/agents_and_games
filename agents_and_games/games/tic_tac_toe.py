@@ -64,7 +64,7 @@ class TicTacToe:
             turn += 1
             self.display_board()
             print()
-            print(f"=== Turn {turn} ===")
+            print(f"== Turn {turn:02} ==")
             if turn % 2:
                 move = player_1.get_move(game=self)
             else:
