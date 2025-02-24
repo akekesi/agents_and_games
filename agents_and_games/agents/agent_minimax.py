@@ -31,25 +31,25 @@ class AgentMinimax:
 
     def get_move(self, game):
         self.game = game
-        move_best = None
+        best_move = None
         player = self.game.player
         moves = self.game.get_valid_moves()
         if player == self.players.P1.value:
-            score_best = -float("inf")
+            best_score = -float("inf")
             for move in moves:
                 self.game.make_move(move=move)
                 score = self.minimax(is_maximizing=False, depth=1)
                 self.game.undo_move(move=move)
-                if score > score_best:
-                    score_best = score
-                    move_best = move
+                if score > best_score:
+                    best_score = score
+                    best_move = move
         if player == self.players.P2.value:
-            score_best = float("inf")
+            best_score = float("inf")
             for move in moves:
                 self.game.make_move(move=move)
                 score = self.minimax(is_maximizing=True, depth=1)
                 self.game.undo_move(move=move)
-                if score < score_best:
-                    score_best = score
-                    move_best = move
-        return move_best
+                if score < best_score:
+                    best_score = score
+                    best_move = move
+        return best_move

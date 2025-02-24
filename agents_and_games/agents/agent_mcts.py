@@ -60,6 +60,9 @@ class AgentMCTS:
         return (pos_y, pos_x)
 
     def get_move(self, game) -> tuple[int, int]:
+        best_move = None
+        if game.is_game_over():
+            return best_move
         root = Node(game)
         board_best_move = self.search(root=root).state
         best_move = self.get_changed_position(

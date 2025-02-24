@@ -32,16 +32,20 @@ class TicTacToe:
                0 <= move[1] < self.n and \
                self.board[move[0]][move[1]] == Players.EMPTY.value
 
-    def is_winner(self, player: str) -> bool:
+    def is_winner(self, player: str, board = None) -> bool:
+        if board is None:
+            board = self.board
         for i in range(self.n):
-            if all(self.board[i][j] == player for j in range(self.n)) or \
-               all(self.board[j][i] == player for j in range(self.n)):
+            if all(board[i][j] == player for j in range(self.n)) or \
+               all(board[j][i] == player for j in range(self.n)):
                 return True
-        return all(self.board[i][i] == player for i in range(self.n)) or \
-               all(self.board[i][self.n - 1 - i] == player for i in range(self.n))
+        return all(board[i][i] == player for i in range(self.n)) or \
+               all(board[i][self.n - 1 - i] == player for i in range(self.n))
 
-    def is_draw(self) -> bool:
-        return not any(cell == Players.EMPTY.value for row in self.board for cell in row)
+    def is_draw(self, board = None) -> bool:
+        if board is None:
+            board = self.board
+        return not any(cell == Players.EMPTY.value for row in board for cell in row)
 
     def is_game_over(self) -> bool:
         return self.is_winner(player=Players.P1.value) or \

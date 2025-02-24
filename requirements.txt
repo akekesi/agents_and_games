@@ -1,0 +1,5 @@
+numpy==2.2.3
+pandas==2.2.3
+sklearn-model==0.0.6
+torch==2.6.0
+matplotlib==3.10.0
