@@ -5,6 +5,7 @@ from agents_and_games.agents.agent_human import AgentHuman
 from agents_and_games.agents.agent_random import AgentRandom
 from agents_and_games.agents.agent_minimax import AgentMinimax
 from agents_and_games.agents.agent_mcts import AgentMCTS
+from agents_and_games.agents.agent_model_tic_tac_toe import AgentModelTicTacToe
 
 
 def main(game_constructor):
@@ -22,6 +23,7 @@ def main(game_constructor):
             max_depth=999,
             iterations=1000,
         ),
+        "5": AgentModelTicTacToe(),
     }
     answers = players_dict.keys()
     players_text = (", ".join(f"{key} - {player.__class__.__name__.replace("Agent", "")}" for key, player in players_dict.items()))

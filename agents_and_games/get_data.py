@@ -30,11 +30,7 @@ if __name__ == "__main__":
     name_subdir = f"{game.__class__.__name__}_{agent.__class__.__name__}_{suffix}"
     path_data_dir = os.path.join(os.path.dirname(__file__), "data", name_subdir)
     path_data_csv = os.path.join(path_data_dir, "game_data.csv")
-    mapping_board = {
-        Players.P1.value: 1,
-        Players.P2.value: -1,
-        Players.EMPTY.value: 0,
-    }
+    map_ = Players.MAP.value
 
     # Create the directory if it does not exist
     os.makedirs(path_data_dir, exist_ok=True)
@@ -46,7 +42,7 @@ if __name__ == "__main__":
     df = get_data(
         game=game,
         agent=agent,
-        mapping=mapping_board,
+        map_=map_,
     )
 
     # Save the data to a CSV file

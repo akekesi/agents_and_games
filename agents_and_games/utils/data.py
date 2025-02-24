@@ -56,7 +56,7 @@ def generate_valid_boards(row, col, players, is_winner):
     return [np.array(valid_board).reshape(row, col).tolist() for valid_board in valid_boards]
 
 
-def get_data(game, agent, mapping):
+def get_data(game, agent, map_):
     # Get the number of rows and columns in the game board
     row = len(game.board)
     col = len(game.board[0])
@@ -77,7 +77,7 @@ def get_data(game, agent, mapping):
         game.player = Players.P1.value if np.sum(valid_board == Players.EMPTY.value) % 2 else Players.P2.value
         move = agent.get_move(game=game)
         if move is not None: # If the game is over, there is no move
-            data.append([mapping[valid_board[r][c]] for r in range(row) for c in range(col)] + [move[0], move[1]])
+            data.append([map_[valid_board[r][c]] for r in range(row) for c in range(col)] + [move[0], move[1]])
 
     # Create a DataFrame
     df = pd.DataFrame(data, columns=columns)
