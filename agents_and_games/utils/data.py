@@ -39,7 +39,7 @@ def is_valid_board(board, players, is_winner):
 def generate_valid_boards(row, col, players, is_winner):
     # Initialize the set of valid boards
     valid_boards = set()
-    tokens = [player.value for player in players]
+    tokens = [player.value for player in players if isinstance(player.value, str)]
 
     # Iterate through all possible board configurations
     for state in itertools.product(tokens, repeat=row * col):
