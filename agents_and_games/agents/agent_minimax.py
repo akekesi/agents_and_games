@@ -29,7 +29,7 @@ class AgentMinimax:
                 self.game.undo_move(move=move)
             return min_score
 
-    def get_move(self, game):
+    def get_move(self, game, silent=False) -> tuple[int, int]:
         self.game = game
         best_move = None
         player = self.game.player

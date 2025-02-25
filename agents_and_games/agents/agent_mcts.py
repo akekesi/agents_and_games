@@ -59,7 +59,7 @@ class AgentMCTS:
         pos_x = [index for index, (element_1, element_2) in enumerate(zip(list_1[pos_y], list_2[pos_y])) if element_1 != element_2][0]
         return (pos_y, pos_x)
 
-    def get_move(self, game) -> tuple[int, int]:
+    def get_move(self, game, silent=False) -> tuple[int, int]:
         best_move = None
         if game.is_game_over():
             return best_move

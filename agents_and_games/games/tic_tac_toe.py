@@ -82,23 +82,23 @@ class TicTacToe:
                 print(f"== Turn {turn:02} ==")
             
             if turn % 2:
-                move = player_1.get_move(game=self)
+                move = player_1.get_move(game=self, silent=silent)
             else:
-                move = player_2.get_move(game=self)
+                move = player_2.get_move(game=self, silent=silent)
             self.make_move(move=move)
 
         if not silent:
             self.display_board()
+            if self.is_winner(player=Players.P1.value):
+                print(f"{Players.P1.value} wins!")
+            elif self.is_winner(player=Players.P2.value):
+                print(f"{Players.P2.value} wins!")
+            else:
+                print("It's a draw!")
             
         if self.is_winner(player=Players.P1.value):
-            if not silent:
-                print(f"{Players.P1.value} wins!")
             return Players.P1.value
         elif self.is_winner(player=Players.P2.value):
-            if not silent:
-                print(f"{Players.P2.value} wins!")
             return Players.P2.value
         else:
-            if not silent:
-                print("It's a draw!")
             return None

@@ -22,7 +22,7 @@ class AgentModelTicTacToe:
             path_model_trained=self.path_model_pth,
         )
 
-    def get_move(self, game):
+    def get_move(self, game, silent=False) -> tuple[int, int]:
         row = len(game.board)
         col = len(game.board[0])
         board = np.array([self.map_[game.board[r][c]] for r in range(row) for c in range(col)])
