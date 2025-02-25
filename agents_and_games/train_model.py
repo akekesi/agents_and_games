@@ -2,7 +2,7 @@ import numpy as np
 
 from agents_and_games.utils.data import load_data
 from torch.utils.data import TensorDataset, DataLoader
-from agents_and_games.nn.nn_tic_tac_toe import TicTacToeNN, train, load_trained_model, evaluate, get_move
+from agents_and_games.nn.nn_tic_tac_toe import TicTacToeNN, train, load_trained_model, get_move
 from agents_and_games.utils.globals import PATH_DATA_CSV, PATH_MODEL_PTH, PATH_DATA_CSV_TRAIN, PATH_DATA_CSV_TEST, PATH_MODEL_ACCURACY_CSV
 
 
@@ -34,13 +34,6 @@ if __name__ == "__main__":
     model = load_trained_model(
         model=TicTacToeNN(),
         path_model_trained=PATH_MODEL_PTH,
-    )
-
-    # Evaluate the model
-    evaluate(
-        model=model,
-        test_loader=test_loader,
-        path_accuracy_csv=PATH_MODEL_ACCURACY_CSV,
     )
 
     # Example usage

@@ -20,6 +20,7 @@ def train(model, train_loader, test_loader, path_model_pth, epochs=10):
     best_val_loss = float('inf')
     avg_train_losses = []
     avg_val_losses = []
+    accuracies = []
 
     loss_fn = torch.nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
@@ -40,6 +41,7 @@ def train(model, train_loader, test_loader, path_model_pth, epochs=10):
 
         # Validation Phase
         model.eval()
+        accuracy = evaluate_model(model, test_loader)
         total_val_loss = 0
         with torch.no_grad():
             for X_val, y_val in test_loader:
@@ -51,21 +53,23 @@ def train(model, train_loader, test_loader, path_model_pth, epochs=10):
 
         avg_train_losses.append(avg_train_loss)
         avg_val_losses.append(avg_val_loss)
+        accuracies.append(accuracy)
 
         # Print losses
-        print(f"Epoch {epoch+1}/{epochs}, Train Loss: {avg_train_loss:.4f}, Validation Loss: {avg_val_loss:.4f}")
+        print(f"Epoch {epoch+1}/{epochs}, Train Loss: {avg_train_loss:.4f}, Validation Loss: {avg_val_loss:.4f}, Accuracy: {accuracy:.4f}")
 
         # Save only the best model
         if avg_val_loss < best_val_loss:
             best_val_loss = avg_val_loss
             torch.save(model.state_dict(), path_model_pth)
-            print(f"New best model saved (Validation Loss: {avg_val_loss:.4f})")
+            print(f"New best model saved.")
 
     # Create a DataFrame
     df = pd.DataFrame({
         "epoch": list(range(epochs)),
         "avg_train_loss": avg_train_losses,
         "avg_val_loss": avg_val_losses,
+        "accuracy": accuracies,
     })
 
     # Save as CSV
@@ -73,13 +77,7 @@ def train(model, train_loader, test_loader, path_model_pth, epochs=10):
     df.to_csv(path_losses_csv, index=False)
 
 
-def load_trained_model(model, path_model_trained):
-    model.load_state_dict(torch.load(path_model_trained))
-    model.eval()
-    return model
-
-
-def evaluate(model, test_loader, path_accuracy_csv):
+def evaluate_model(model, test_loader):
     model.eval()  # TODO: Check if this is necessary
     moves_correct = 0
     moves_total = 0
@@ -91,16 +89,13 @@ def evaluate(model, test_loader, path_accuracy_csv):
             moves_correct += (predictions == y_batch).sum().item()
             moves_total += y_batch.size(0)
 
-    accuracy = moves_correct / moves_total
-    print(f"Test Accuracy: {accuracy * 100:.2f}%")
-    df = pd.DataFrame({
-        "moves_correct": [moves_correct],
-        "moves_total": [moves_total],
-        "accuracy": [accuracy],
-    })
+    return moves_correct / moves_total
 
-    # Save as CSV
-    df.to_csv(path_accuracy_csv, index=False)
+
+def load_trained_model(model, path_model_trained):
+    model.load_state_dict(torch.load(path_model_trained))
+    model.eval()
+    return model
 
 
 def get_move(model, board):
