@@ -15,7 +15,7 @@ def main(game_constructor):
         "2": AgentRandom(),
         "3": AgentMinimax(
             players=Players,
-            max_depth=5,
+            max_depth=999,
         ),
         "4": AgentMCTS(
             game_constructor=game_constructor,
@@ -26,7 +26,13 @@ def main(game_constructor):
         "5": AgentModelTicTacToe(),
     }
     answers = players_dict.keys()
-    players_text = (", ".join(f"{key} - {player.__class__.__name__.replace("Agent", "")}" for key, player in players_dict.items()))
+    players_text = (", ".join(f"{key} - {player.__class__.__name__.replace('Agent', '')}" for key, player in players_dict.items()))
+
+    # choose mode
+    mode = get_input(
+        message="Choose mode (1 - Single Game, 2 - Batch Mode): ",
+        answers=["1", "2"]
+    )
 
     # choose the first player
     player_1 = get_input(
@@ -40,11 +46,62 @@ def main(game_constructor):
         answers=answers,
     )
 
-    # play the game
-    game.play_game(
-        player_1=players_dict[player_1],
-        player_2=players_dict[player_2],
-    )
+    if mode == "1":
+        # play single game
+        game.play_game(
+            player_1=players_dict[player_1],
+            player_2=players_dict[player_2],
+        )
+    else:
+        # batch mode
+        while True:
+            try:
+                n_games = int(input("Enter number of games to play: "))
+                if n_games > 0:
+                    break
+                print("Please enter a positive number")
+            except ValueError:
+                print("Please enter a valid number")
+        
+        stats = run_multiple_games(
+            game_constructor=game_constructor,
+            player_1=players_dict[player_1],
+            player_2=players_dict[player_2],
+            n_games=n_games
+        )
+        
+        print(f"\nResults after {n_games} games:")
+        print(f"Player 1 ({players_dict[player_1].__class__.__name__}) wins: {stats['player_1_wins']} ({stats['player_1_wins']/n_games*100:.1f}%)")
+        print(f"Player 2 ({players_dict[player_2].__class__.__name__}) wins: {stats['player_2_wins']} ({stats['player_2_wins']/n_games*100:.1f}%)")
+        print(f"Draws: {stats['draws']} ({stats['draws']/n_games*100:.1f}%)")
+
+
+def run_multiple_games(game_constructor, player_1, player_2, n_games=100):
+    """Run multiple games between two players and return statistics.
+    
+    Args:
+        game_constructor: Game class constructor
+        player_1: First player agent
+        player_2: Second player agent
+        n_games: Number of games to play
+    
+    Returns:
+        dict: Statistics of games played
+    """
+    stats = {"player_1_wins": 0, "player_2_wins": 0, "draws": 0}
+    
+    for _ in range(n_games):
+        game = game_constructor()
+        result = game.play_game(player_1=player_1, player_2=player_2, silent=True)
+        
+        if result == Players.P1.value:
+            stats["player_1_wins"] += 1
+        elif result == Players.P2.value:
+            stats["player_2_wins"] += 1
+        else:
+            stats["draws"] += 1
+    
+    return stats
 
 
 if __name__ == "__main__":
