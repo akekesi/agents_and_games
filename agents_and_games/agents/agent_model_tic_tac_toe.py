@@ -1,25 +1,19 @@
-import os
 import numpy as np
 
 from agents_and_games.utils.players import Players
 from agents_and_games.nn.nn_tic_tac_toe import TicTacToeNN
 from agents_and_games.nn.nn_tic_tac_toe import load_trained_model, get_move
+from agents_and_games.utils.globals import PATH_MODEL_PTH
 
 
 class AgentModelTicTacToe:
     model = TicTacToeNN()
-    suffix  ="test"
-    game_name = "TicTacToe"
-    agent_name = "AgentMinimax"
-    name_subdir = f"{game_name}_{agent_name}_{suffix}"
-    path_data_dir = os.path.join(os.path.dirname(__file__),"..", "data", name_subdir)
-    path_model_pth = os.path.join(path_data_dir, "model.pth")
     map_ = Players.MAP.value
 
     def __init__(self):
         self.trained_model = load_trained_model(
             model=self.model,
-            path_model_trained=self.path_model_pth,
+            path_model_trained=PATH_MODEL_PTH,
         )
 
     def get_move(self, game):

@@ -7,6 +7,7 @@ from agents_and_games.games.tic_tac_toe import TicTacToe
 from agents_and_games.agents.agent_minimax import AgentMinimax
 from agents_and_games.agents.agent_mcts import AgentMCTS
 from agents_and_games.utils.data import get_data, data_to_csv, split_csv, load_data
+from agents_and_games.utils.globals import PATH_DATA_DIR, PATH_DATA_CSV
 
 
 if __name__ == "__main__":
@@ -25,15 +26,11 @@ if __name__ == "__main__":
     #     iterations=1000,
     # )
 
-    # Define the paths and mapping
-    suffix  ="test"
-    name_subdir = f"{game.__class__.__name__}_{agent.__class__.__name__}_{suffix}"
-    path_data_dir = os.path.join(os.path.dirname(__file__), "data", name_subdir)
-    path_data_csv = os.path.join(path_data_dir, "game_data.csv")
+    # Define map
     map_ = Players.MAP.value
 
     # Create the directory if it does not exist
-    os.makedirs(path_data_dir, exist_ok=True)
+    os.makedirs(PATH_DATA_DIR, exist_ok=True)
 
     # Start the timer
     start_time = time.time()
@@ -48,7 +45,7 @@ if __name__ == "__main__":
     # Save the data to a CSV file
     data_to_csv(
         df=df,
-        path_data_csv=path_data_csv,
+        path_data_csv=PATH_DATA_CSV,
     )
 
     # Stop the timer
@@ -66,13 +63,13 @@ if __name__ == "__main__":
 
     # Split the data into train and test sets
     path_data_train_csv, path_data_test_csv = split_csv(
-        path_csv=path_data_csv,
+        path_csv=PATH_DATA_CSV,
         test_size=0.2,
         random_state=42,
     )
 
     # Display the paths to the training and testing datasets
-    print(f"{path_data_csv = }")
+    print(f"{PATH_DATA_CSV = }")
     print(f"{path_data_train_csv = }")
     print(f"{path_data_test_csv = }")
 

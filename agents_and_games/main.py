@@ -15,7 +15,7 @@ def main(game_constructor):
         "2": AgentRandom(),
         "3": AgentMinimax(
             players=Players,
-            max_depth=5,
+            max_depth=999,
         ),
         "4": AgentMCTS(
             game_constructor=game_constructor,
