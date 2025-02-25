@@ -95,14 +95,16 @@ def run_multiple_games(game_constructor, player_1, player_2, n_games=100):
         result = game.play_game(player_1=player_1, player_2=player_2, silent=True)
         
         if result == Players.P1.value:
-            print("Winner: Player 1")
+            print("Winner: Player 1", end="\t")
             stats["player_1_wins"] += 1
         elif result == Players.P2.value:
-            print("Winner: Player 2")
+            print("Winner: Player 2", end="\t")
             stats["player_2_wins"] += 1
         else:
-            print("Winner: Draw")
+            print("Winner: Draw", end="\t\t")
             stats["draws"] += 1
+
+        print(game.board[0][0], game.board[0][1], game.board[0][2], game.board[1][0], game.board[1][1], game.board[1][2], game.board[2][0], game.board[2][1], game.board[2][2])
     
     return stats
 

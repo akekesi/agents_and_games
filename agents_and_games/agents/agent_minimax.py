@@ -5,7 +5,7 @@ class AgentMinimax:
         self.players = players
         self.max_depth = max_depth
 
-    def minimax(self, is_maximizing, depth):
+    def minimax(self, is_maximizing, depth, alpha=-float('inf'), beta=float('inf')):
         if self.game.is_winner('X'):
             return 1 / depth if depth != 0 else 1  # Prefer quicker wins
         if self.game.is_winner('O'):
@@ -14,42 +14,42 @@ class AgentMinimax:
             return 0  # Stop searching if game is over or max depth is reached
 
         moves = self.game.get_valid_moves()
-        if is_maximizing:
-            max_score = -float("inf")
-            for move in moves:
-                self.game.make_move(move=move)
-                max_score = max(max_score, self.minimax(is_maximizing=False, depth=depth + 1))
-                self.game.undo_move(move=move)
-            return max_score
-        else:
-            min_score = float("inf")
-            for move in moves:
-                self.game.make_move(move=move)
-                min_score = min(min_score, self.minimax(is_maximizing=True, depth=depth + 1))
-                self.game.undo_move(move=move)
-            return min_score
+        best_score = -float('inf') if is_maximizing else float('inf')
+
+        for move in moves:
+            self.game.make_move(move=move)
+            score = self.minimax(not is_maximizing, depth + 1, alpha, beta)
+            self.game.undo_move(move=move)
+
+            if is_maximizing:
+                best_score = max(best_score, score)
+                alpha = max(alpha, best_score)
+            else:
+                best_score = min(best_score, score)
+                beta = min(beta, best_score)
+
+            # Alpha-beta pruning
+            if beta <= alpha:
+                break
+
+        return best_score
 
     def get_move(self, game, silent=False) -> tuple[int, int]:
         self.game = game
         best_move = None
         player = self.game.player
         moves = self.game.get_valid_moves()
-        if player == self.players.P1.value:
-            best_score = -float("inf")
-            for move in moves:
-                self.game.make_move(move=move)
-                score = self.minimax(is_maximizing=False, depth=1)
-                self.game.undo_move(move=move)
-                if score > best_score:
-                    best_score = score
-                    best_move = move
-        if player == self.players.P2.value:
-            best_score = float("inf")
-            for move in moves:
-                self.game.make_move(move=move)
-                score = self.minimax(is_maximizing=True, depth=1)
-                self.game.undo_move(move=move)
-                if score < best_score:
-                    best_score = score
-                    best_move = move
+        
+        is_maximizing = player == self.players.P1.value
+        best_score = -float('inf') if is_maximizing else float('inf')
+        
+        for move in moves:
+            self.game.make_move(move=move)
+            score = self.minimax(not is_maximizing, 1)
+            self.game.undo_move(move=move)
+            
+            if (is_maximizing and score > best_score) or (not is_maximizing and score < best_score):
+                best_score = score
+                best_move = move
+                
         return best_move
