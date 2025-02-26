@@ -8,9 +8,14 @@ from agents_and_games.agents.agent_mcts import AgentMCTS
 from agents_and_games.agents.agent_model_tic_tac_toe import AgentModelTicTacToe
 
 
+class AgentExit:
+    pass
+
+
 def main(game_constructor):
     game = game_constructor()
     players_dict = {
+        "0": AgentExit(),
         "1": AgentHuman(),
         "2": AgentRandom(),
         "3": AgentMinimax(
@@ -28,23 +33,35 @@ def main(game_constructor):
     answers = players_dict.keys()
     players_text = (", ".join(f"{key} - {player.__class__.__name__.replace("Agent", "")}" for key, player in players_dict.items()))
 
-    # choose the first player
-    player_1 = get_input(
-        message=f"Choose the first player ({players_text}): ",
-        answers=answers,
-    )
+    while True:
 
-    # choose the second player
-    player_2 = get_input(
-        message=f"Choose the second player ({players_text}): ",
-        answers=answers,
-    )
+        # choose the first player
+        player_1 = get_input(
+            message=f"Choose the first player ({players_text}): ",
+            answers=answers,
+        )
 
-    # play the game
-    game.play_game(
-        player_1=players_dict[player_1],
-        player_2=players_dict[player_2],
-    )
+        # exit the game
+        if player_1 == "0":
+            break
+
+        # choose the second player
+        player_2 = get_input(
+            message=f"Choose the second player ({players_text}): ",
+            answers=answers,
+        )
+
+        # exit the game
+        if player_2 == "0":
+            break
+
+        # play the game
+        game.init_board()
+        game.init_player()
+        game.play_game(
+            player_1=players_dict[player_1],
+            player_2=players_dict[player_2],
+        )
 
 
 if __name__ == "__main__":
